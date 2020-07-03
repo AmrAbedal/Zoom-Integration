@@ -13,7 +13,24 @@
 		A0F403C824AF60D4006AB665 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A0F403C624AF60D4006AB665 /* Main.storyboard */; };
 		A0F403CA24AF60EE006AB665 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A0F403C924AF60EE006AB665 /* Assets.xcassets */; };
 		A0F403CD24AF60EE006AB665 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A0F403CB24AF60EE006AB665 /* LaunchScreen.storyboard */; };
+		A0F403D724AF6234006AB665 /* MobileRTCResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A0F403D424AF61F1006AB665 /* MobileRTCResources.bundle */; };
+		A0F403DC24AF6277006AB665 /* MobileRTC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0F403D624AF6233006AB665 /* MobileRTC.framework */; };
+		A0F403DD24AF6277006AB665 /* MobileRTC.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A0F403D624AF6233006AB665 /* MobileRTC.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A0F403DE24AF6278006AB665 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				A0F403DD24AF6277006AB665 /* MobileRTC.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		A0F403BD24AF60D3006AB665 /* ZoomIntegration.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZoomIntegration.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -24,6 +41,8 @@
 		A0F403C924AF60EE006AB665 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A0F403CC24AF60EE006AB665 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A0F403CE24AF60EE006AB665 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A0F403D424AF61F1006AB665 /* MobileRTCResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MobileRTCResources.bundle; sourceTree = "<group>"; };
+		A0F403D624AF6233006AB665 /* MobileRTC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileRTC.framework; path = ../../../Documents/tools/ZoomDebug/lib/MobileRTC.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +50,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A0F403DC24AF6277006AB665 /* MobileRTC.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -56,6 +76,8 @@
 		A0F403BF24AF60D4006AB665 /* ZoomIntegration */ = {
 			isa = PBXGroup;
 			children = (
+				A0F403D624AF6233006AB665 /* MobileRTC.framework */,
+				A0F403D424AF61F1006AB665 /* MobileRTCResources.bundle */,
 				A0F403C024AF60D4006AB665 /* AppDelegate.swift */,
 				A0F403C224AF60D4006AB665 /* SceneDelegate.swift */,
 				A0F403C424AF60D4006AB665 /* ViewController.swift */,
@@ -77,6 +99,7 @@
 				A0F403B924AF60D3006AB665 /* Sources */,
 				A0F403BA24AF60D3006AB665 /* Frameworks */,
 				A0F403BB24AF60D3006AB665 /* Resources */,
+				A0F403DE24AF6278006AB665 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -126,6 +149,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A0F403CD24AF60EE006AB665 /* LaunchScreen.storyboard in Resources */,
+				A0F403D724AF6234006AB665 /* MobileRTCResources.bundle in Resources */,
 				A0F403CA24AF60EE006AB665 /* Assets.xcassets in Resources */,
 				A0F403C824AF60D4006AB665 /* Main.storyboard in Resources */,
 			);
@@ -286,6 +310,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FX2Z63PGT5;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/ZoomIntegration",
+				);
 				INFOPLIST_FILE = ZoomIntegration/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -304,6 +332,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FX2Z63PGT5;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/ZoomIntegration",
+				);
 				INFOPLIST_FILE = ZoomIntegration/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

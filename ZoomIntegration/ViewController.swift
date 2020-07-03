@@ -8,14 +8,56 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+enum UserType {
+   case partner
+   case user
+}
 
+class ViewController: UIViewController {
+    private var userType: UserType = .partner
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        ZoomManager.shared.initializeZoom(navigationController: self.navigationController)
+        ZoomManager.shared.delegate = self
+        switch userType {
+        case .partner:
+            ZoomManager.shared.login()
+            ZoomManager.shared.startMeeting(meetingTitle: "Hello Zoom", userName: "Amr")
+        case .user:
+            ZoomManager.shared.joinMeeting(meetingNo: "kldsjh747bd7dduf7f", meetingPassword: "12345", meetingTitle: "Hello Zoom", userName: "Amr", token: "token")
+        }
     }
+}
 
-
+extension ViewController: ZoomManagerDelegate {
+    func getUserName() -> String {
+      return  "Amr"
+    }
+    
+    func getUserPassword() -> String {
+        return "123456"
+    }
+    
+    func onZoomMeetingStatusChanged(state: MobileRTCMeetingState) {
+        
+    }
+    
+    func onCallStarted(callID: String, password: String) {
+        
+    }
+    
+    func onCallEnded(callID: String) {
+        
+    }
+    
+    func onZoomReady() {
+        
+    }
+    
+    func onZoomLoginFail() {
+        
+    }
 }
 
 
@@ -27,10 +69,9 @@ import MobileRTC
 
 let zoomTag = "Zoom Tag --->"
 
-protocol ZoomCallbacks :class{
+protocol ZoomManagerDelegate :class {
     func getUserName()-> String
     func getUserPassword()-> String
-    
     func onZoomMeetingStatusChanged(state: MobileRTCMeetingState)
     func onCallStarted(callID: String, password: String)
     func onCallEnded(callID: String)
@@ -40,24 +81,20 @@ protocol ZoomCallbacks :class{
 
 
 class ZoomManager: NSObject, MobileRTCAuthDelegate, MobileRTCMeetingServiceDelegate {
-     static let instance = ZoomManager()
+    static let instance = ZoomManager()
     
     private lazy var zoom = MobileRTC.shared()
     private let appKey = "appKey"
     private let appSecret = "appSecret"
     
-    private weak var callbacks :ZoomCallbacks? = nil
+    weak var delegate :ZoomManagerDelegate? = nil
     private (set) var isLoggedIn = false
     // MARK: - public api
     static var shared : ZoomManager{
         return instance
     }
-    
-    func addCallback(callbacks :ZoomCallbacks){
-        self.callbacks = callbacks
-    }
-    
-    func startZoom(navigationController: UINavigationController?){
+
+    func initializeZoom(navigationController: UINavigationController?){
         initializeSDK(navigationController)
         authZoom()
     }
@@ -80,8 +117,8 @@ class ZoomManager: NSObject, MobileRTCAuthDelegate, MobileRTCMeetingServiceDeleg
     
     func login(){
         if let authService = zoom.getAuthService(),
-            let userName = callbacks?.getUserName(),
-            let userPassword = callbacks?.getUserPassword(){
+            let userName = delegate?.getUserName(),
+            let userPassword = delegate?.getUserPassword(){
             authService.delegate = self
             authService.login(withEmail: userName, password: userPassword, rememberMe: true)
         }
@@ -118,7 +155,6 @@ class ZoomManager: NSObject, MobileRTCAuthDelegate, MobileRTCMeetingServiceDeleg
             authService.delegate = self
             authService.clientKey = appKey
             authService.clientSecret = appSecret
-            
             authService.sdkAuth()
         }
     }
@@ -127,7 +163,7 @@ class ZoomManager: NSObject, MobileRTCAuthDelegate, MobileRTCMeetingServiceDeleg
     func onMobileRTCAuthReturn(_ returnValue: MobileRTCAuthError) {
         print("\(zoomTag) onMobileRTCAuthReturn : \(returnValue.rawValue)")
         if returnValue.rawValue == 0 {
-            callbacks?.onZoomReady()
+            delegate?.onZoomReady()
         }
         
     }
@@ -135,9 +171,9 @@ class ZoomManager: NSObject, MobileRTCAuthDelegate, MobileRTCMeetingServiceDeleg
     func onMobileRTCLoginReturn(_ returnValue: Int) {
         if returnValue == 0{
             isLoggedIn = true
-            callbacks?.onZoomReady()
+            delegate?.onZoomReady()
         }else{
-            callbacks?.onZoomLoginFail()
+            delegate?.onZoomLoginFail()
         }
     }
     
@@ -146,11 +182,11 @@ class ZoomManager: NSObject, MobileRTCAuthDelegate, MobileRTCMeetingServiceDeleg
     func onMeetingStateChange(_ state: MobileRTCMeetingState) {
         switch state.rawValue {
         case MobileRTCMeetingState_Idle.rawValue:
-            callbacks?.onCallEnded(callID: MobileRTCInviteHelper.sharedInstance().ongoingMeetingNumber)
+            delegate?.onCallEnded(callID: MobileRTCInviteHelper.sharedInstance().ongoingMeetingNumber)
         case MobileRTCMeetingState_Connecting.rawValue:
             break
         case MobileRTCMeetingState_InMeeting.rawValue:
-            callbacks?.onCallStarted(callID: MobileRTCInviteHelper.sharedInstance().ongoingMeetingNumber, password: MobileRTCInviteHelper.sharedInstance().rawMeetingPassword)
+            delegate?.onCallStarted(callID: MobileRTCInviteHelper.sharedInstance().ongoingMeetingNumber, password: MobileRTCInviteHelper.sharedInstance().rawMeetingPassword)
         case MobileRTCMeetingState_WebinarPromote.rawValue:
             break
         case MobileRTCMeetingState_WebinarDePromote.rawValue:
@@ -158,8 +194,7 @@ class ZoomManager: NSObject, MobileRTCAuthDelegate, MobileRTCMeetingServiceDeleg
         default:
             break
         }
-        
-        callbacks?.onZoomMeetingStatusChanged(state: state)
+        delegate?.onZoomMeetingStatusChanged(state: state)
     }
     
 }
